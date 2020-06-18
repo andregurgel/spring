@@ -3,6 +3,7 @@ package br.com.gurgel.algamoneyapi.resource;
 import br.com.gurgel.algamoneyapi.event.RecursoCriadoEvent;
 import br.com.gurgel.algamoneyapi.model.Pessoa;
 import br.com.gurgel.algamoneyapi.repository.PessoaRepository;
+import br.com.gurgel.algamoneyapi.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class PessoaResource {
 
     @Autowired
     private ApplicationEventPublisher publisher;
+
+    @Autowired
+    private PessoaService pessoaService;
 
     @GetMapping
     public List<Pessoa> listar() {
@@ -52,6 +56,12 @@ public class PessoaResource {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long codigo){
         pessoaRepository.deleteById(codigo);
+    }
+
+    @PutMapping("/{codigo}")
+    public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
+        Pessoa pessoaSalva = pessoaService.atualizar(codigo, pessoa);
+        return ResponseEntity.ok(pessoaSalva);
     }
 
 
