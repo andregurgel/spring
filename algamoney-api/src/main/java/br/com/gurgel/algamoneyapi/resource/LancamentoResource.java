@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/lancamentos")
@@ -47,4 +46,9 @@ public class LancamentoResource {
         Lancamento lancamento = lancamentoService.buscarLancamentoPeloCodigo(codigo);
         return ResponseEntity.ok(lancamento);
     }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long codigo) { lancamentoRepository.deleteById(codigo); }
+
 }

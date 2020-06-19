@@ -47,4 +47,8 @@ public class CategoriaResource {
         Categoria categoria = categoriaService.buscarCategoriaPeloCodigo(codigo);
         return ResponseEntity.ok(categoria);
     }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(Long codigo) { categoriaRepository.deleteById(codigo); }
 }
