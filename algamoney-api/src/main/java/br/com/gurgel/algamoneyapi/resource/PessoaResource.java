@@ -44,12 +44,8 @@ public class PessoaResource {
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Pessoa> buscarPeloCodigo(@PathVariable Long codigo){
-        Optional<Pessoa> pessoa = pessoaRepository.findById(codigo);
-        if (pessoa.isPresent()){
-            return ResponseEntity.ok(pessoa.get());
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+        Pessoa pessoa = pessoaService.buscarPessoaPeloCodigo(codigo);
+        return ResponseEntity.ok(pessoa);
     }
 
     @DeleteMapping("/{codigo}")
