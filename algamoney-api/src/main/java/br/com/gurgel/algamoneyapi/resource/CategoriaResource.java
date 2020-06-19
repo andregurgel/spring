@@ -3,6 +3,7 @@ package br.com.gurgel.algamoneyapi.resource;
 import br.com.gurgel.algamoneyapi.event.RecursoCriadoEvent;
 import br.com.gurgel.algamoneyapi.model.Categoria;
 import br.com.gurgel.algamoneyapi.repository.CategoriaRepository;
+import br.com.gurgel.algamoneyapi.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class CategoriaResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
+    @Autowired
+    private CategoriaService categoriaService;
+
     @GetMapping
     public List<Categoria> listar() {
         return categoriaRepository.findAll();
@@ -40,11 +44,7 @@ public class CategoriaResource {
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo){
-        Optional<Categoria> categoria = categoriaRepository.findById(codigo);
-        if (categoria.isPresent()){
-            return ResponseEntity.ok(categoria.get());
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+        Categoria categoria = categoriaService.buscarCategoriaPeloCodigo(codigo);
+        return ResponseEntity.ok(categoria);
     }
 }
