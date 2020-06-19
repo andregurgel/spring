@@ -3,6 +3,7 @@ package br.com.gurgel.algamoneyapi.resource;
 import br.com.gurgel.algamoneyapi.event.RecursoCriadoEvent;
 import br.com.gurgel.algamoneyapi.model.Lancamento;
 import br.com.gurgel.algamoneyapi.repository.LancamentoRepository;
+import br.com.gurgel.algamoneyapi.service.LancamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class LancamentoResource {
     @Autowired
     private ApplicationEventPublisher publisher;
 
+    @Autowired
+    private LancamentoService lancamentoService;
+
     @GetMapping
     public List<Lancamento> listar() {
         return lancamentoRepository.findAll();
@@ -40,11 +44,7 @@ public class LancamentoResource {
 
     @GetMapping("/{codigo}")
     public ResponseEntity<Lancamento> buscarPeloCodigo(@PathVariable Long codigo){
-        Optional<Lancamento> lancamento = lancamentoRepository.findById(codigo);
-        if (lancamento.isPresent()){
-           return ResponseEntity.ok(lancamento.get());
-        } else {
-           return ResponseEntity.notFound().build();
-        }
+        Lancamento lancamento = lancamentoService.buscarLancamentoPeloCodigo(codigo);
+        return ResponseEntity.ok(lancamento);
     }
 }
