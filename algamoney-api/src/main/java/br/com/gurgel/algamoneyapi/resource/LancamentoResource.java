@@ -4,6 +4,7 @@ import br.com.gurgel.algamoneyapi.event.RecursoCriadoEvent;
 import br.com.gurgel.algamoneyapi.exceptionhandler.AlgamoneyExceptionHandler;
 import br.com.gurgel.algamoneyapi.model.Lancamento;
 import br.com.gurgel.algamoneyapi.repository.LancamentoRepository;
+import br.com.gurgel.algamoneyapi.repository.filter.LancamentoFilter;
 import br.com.gurgel.algamoneyapi.service.LancamentoService;
 import br.com.gurgel.algamoneyapi.service.exception.PessoaInexistenteOuInativoException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class LancamentoResource {
     private MessageSource messageSource;
 
     @GetMapping
-    public List<Lancamento> listar() {
-        return lancamentoRepository.findAll();
+    public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
+        return lancamentoRepository.filtrar(lancamentoFilter);
     }
 
     @PostMapping

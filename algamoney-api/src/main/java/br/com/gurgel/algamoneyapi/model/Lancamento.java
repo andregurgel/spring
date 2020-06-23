@@ -23,7 +23,7 @@ public class Lancamento {
     private LocalDate dataVencimento;
 
     @Column(name = "data_pagamento")
-    private LocalDate dataPagemento;
+    private LocalDate dataPagamento;
 
     @NotNull
     private BigDecimal valor;
@@ -68,12 +68,12 @@ public class Lancamento {
         this.dataVencimento = dataVencimento;
     }
 
-    public LocalDate getDataPagemento() {
-        return dataPagemento;
+    public LocalDate getDataPagamento() {
+        return dataPagamento;
     }
 
-    public void setDataPagemento(LocalDate dataPagemento) {
-        this.dataPagemento = dataPagemento;
+    public void setDataPagamento(LocalDate dataPagamento) {
+        this.dataPagamento = dataPagamento;
     }
 
     public BigDecimal getValor() {
