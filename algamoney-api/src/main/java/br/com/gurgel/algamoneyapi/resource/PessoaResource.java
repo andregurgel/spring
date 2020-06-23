@@ -3,6 +3,7 @@ package br.com.gurgel.algamoneyapi.resource;
 import br.com.gurgel.algamoneyapi.event.RecursoCriadoEvent;
 import br.com.gurgel.algamoneyapi.model.Pessoa;
 import br.com.gurgel.algamoneyapi.repository.PessoaRepository;
+import br.com.gurgel.algamoneyapi.repository.filter.PessoaFilter;
 import br.com.gurgel.algamoneyapi.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,8 +29,8 @@ public class PessoaResource {
     private PessoaService pessoaService;
 
     @GetMapping
-    public List<Pessoa> listar() {
-        return pessoaRepository.findAll();
+    public List<Pessoa> pesquisar(PessoaFilter pessoaFilter) {
+        return pessoaRepository.filtrar(pessoaFilter);
     }
 
     @PostMapping
