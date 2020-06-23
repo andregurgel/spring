@@ -7,6 +7,8 @@ import br.com.gurgel.algamoneyapi.repository.filter.PessoaFilter;
 import br.com.gurgel.algamoneyapi.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +31,8 @@ public class PessoaResource {
     private PessoaService pessoaService;
 
     @GetMapping
-    public List<Pessoa> pesquisar(PessoaFilter pessoaFilter) {
-        return pessoaRepository.filtrar(pessoaFilter);
+    public Page<Pessoa> pesquisar(PessoaFilter pessoaFilter, Pageable pageable) {
+        return pessoaRepository.filtrar(pessoaFilter, pageable);
     }
 
     @PostMapping

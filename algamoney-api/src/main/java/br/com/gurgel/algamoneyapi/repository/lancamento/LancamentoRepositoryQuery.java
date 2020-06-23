@@ -8,7 +8,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface LancamentoRepositoryQuery {
-
     public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable);
-
 }

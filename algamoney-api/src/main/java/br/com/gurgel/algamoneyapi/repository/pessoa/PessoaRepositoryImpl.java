@@ -1,10 +1,14 @@
 package br.com.gurgel.algamoneyapi.repository.pessoa;
 
+import br.com.gurgel.algamoneyapi.model.Lancamento;
 import br.com.gurgel.algamoneyapi.model.Lancamento_;
 import br.com.gurgel.algamoneyapi.model.Pessoa;
 import br.com.gurgel.algamoneyapi.model.Pessoa_;
 import br.com.gurgel.algamoneyapi.repository.filter.LancamentoFilter;
 import br.com.gurgel.algamoneyapi.repository.filter.PessoaFilter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -23,7 +27,7 @@ public class PessoaRepositoryImpl implements  PessoaRepositoryQuery{
     private EntityManager manager;
 
     @Override
-    public List<Pessoa> filtrar(PessoaFilter pessoaFilter) {
+    public Page<Pessoa> filtrar(PessoaFilter pessoaFilter, Pageable pageable) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Pessoa> criteria = builder.createQuery(Pessoa.class);
         Root<Pessoa> root = criteria.from(Pessoa.class);
@@ -33,8 +37,9 @@ public class PessoaRepositoryImpl implements  PessoaRepositoryQuery{
         criteria.where(predicates);
 
         TypedQuery<Pessoa> query = manager.createQuery(criteria);
-        return query.getResultList();
+        adicionarRestricoesDePaginacao(query, pageable);
 
+        return new PageImpl<>(query.getResultList(), pageable, total(pessoaFilter));
     }
 
     private Predicate[] criarRestricoes(PessoaFilter pessoaFilter, CriteriaBuilder builder, Root<Pessoa> root) {
@@ -49,5 +54,26 @@ public class PessoaRepositoryImpl implements  PessoaRepositoryQuery{
         }
 
         return predicates.toArray(new Predicate[predicates.size()]);
+    }
+
+    private void adicionarRestricoesDePaginacao(TypedQuery<Pessoa> query, Pageable pageable) {
+        int paginaAtual = pageable.getPageNumber();
+        int totalRegistrosPorPagina = pageable.getPageSize();
+        int primeiroRegistroDaPagina = paginaAtual * totalRegistrosPorPagina;
+
+        query.setFirstResult(primeiroRegistroDaPagina);
+        query.setMaxResults(totalRegistrosPorPagina);
+    }
+
+    private Long total(PessoaFilter pessoaFilter) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root<Pessoa> root = criteria.from(Pessoa.class);
+
+        Predicate[] predicates = criarRestricoes(pessoaFilter, builder, root);
+        criteria.where(predicates);
+
+        criteria.select(builder.count(root));
+        return manager.createQuery(criteria).getSingleResult();
     }
 }
