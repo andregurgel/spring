@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CarService extends ServiceMaker<RepositoryMaker, Car, Long, Car, CarSpecification> {
+
 }
