@@ -5,6 +5,7 @@ import br.com.gurgel.algamoneyapi.exceptionhandler.AlgamoneyExceptionHandler;
 import br.com.gurgel.algamoneyapi.model.Lancamento;
 import br.com.gurgel.algamoneyapi.repository.LancamentoRepository;
 import br.com.gurgel.algamoneyapi.repository.filter.LancamentoFilter;
+import br.com.gurgel.algamoneyapi.repository.projection.ResumoLancamento;
 import br.com.gurgel.algamoneyapi.service.LancamentoService;
 import br.com.gurgel.algamoneyapi.service.exception.PessoaInexistenteOuInativoException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,12 @@ public class LancamentoResource {
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
     public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
         return lancamentoRepository.filtrar(lancamentoFilter, pageable);
+    }
+
+    @GetMapping(params = "resumo")
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
+    public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+        return lancamentoRepository.resumir(lancamentoFilter, pageable);
     }
 
     @PostMapping
