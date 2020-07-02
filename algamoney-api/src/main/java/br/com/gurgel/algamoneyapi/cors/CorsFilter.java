@@ -1,5 +1,7 @@
 package br.com.gurgel.algamoneyapi.cors;
 
+import br.com.gurgel.algamoneyapi.config.property.AlgamoneyApiProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -13,7 +15,8 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter {
 
-    private String originPermitida = "http://localhost:8000";
+    @Autowired
+    private AlgamoneyApiProperty algamoneyApiProperty;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -21,10 +24,10 @@ public class CorsFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        res.setHeader("Access-Control-Allow-Origin", originPermitida);
+        res.setHeader("Access-Control-Allow-Origin", algamoneyApiProperty.getOriginPermitida());
         res.setHeader("Access-Control-Allow-Credentials", "true");
 
-        if ("OPTIONS".equals(req.getMethod()) && originPermitida.equals(req.getHeader("Origin"))) {
+        if ("OPTIONS".equals(req.getMethod()) && algamoneyApiProperty.getOriginPermitida().equals(req.getHeader("Origin"))) {
             res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
             res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
             res.setHeader("Access-Control-Allow-Age", "3600");
